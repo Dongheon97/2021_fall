@@ -1,0 +1,5 @@
+(mov echo "Hello World" "res1")
+(mov list_dir "res2")
+(mov show "test.txt" "res3")
+(del "test2.txt")
+(mov del "test3.txt" "res4")

@@ -1,0 +1,17 @@
+total 76
+drwxrwxr-x 6 kodo kodo  4096 Sep  3 15:37 .
+drwxrwxr-x 4 kodo kodo  4096 Sep  1 11:39 ..
+-rwxrwxr-x 1 kodo kodo 16744 Sep  3 15:37 a.out
+drwxrwxr-x 2 kodo kodo  4096 Sep  3 15:36 .idea
+drwxrwxr-x 3 kodo kodo  4096 Sep  2 17:40 out
+-rw-rw-r-- 1 kodo kodo   690 Sep  3 15:37 res1
+-rw-rw-r-- 1 kodo kodo    12 Sep  3 15:37 res2
+-rw-rw-r-- 1 kodo kodo     0 Sep  3 15:37 res3
+drwxrwxr-x 2 kodo kodo  4096 Sep  3 15:36 result
+drwxrwxr-x 2 kodo kodo  4096 Sep  3 15:26 src
+-rw-rw-r-- 1 kodo kodo   262 Sep  3 15:29 test1.txt
+-rw-rw-r-- 1 kodo kodo   262 Sep  3 15:29 test2.txt
+-rw-rw-r-- 1 kodo kodo   262 Sep  3 15:29 test3.txt
+-rw-rw-r-- 1 kodo kodo   366 Sep  3 15:37 test.c
+-rw-rw-r-- 1 kodo kodo   264 Sep  3 15:36 test.hf
+-rw-rw-r-- 1 kodo kodo   423 Sep  2 16:54 week01.iml
