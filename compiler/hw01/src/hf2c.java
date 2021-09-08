@@ -1,23 +1,27 @@
 /*
 컴파일러 개론 1주차 과제
 201702052 이동헌
-os : linux mint | jdk : openjdk-16 | compiler : eclipse compiler
+os : linux mint | jdk : openjdk-16 | compiler : eclipse compiler | gcc (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0
 */
 
 import java.io.*;
 
 public class hf2c{
     public static void main(String[] args){
+        // for preprocessing
         BufferedReader buf = null;
         String old_line;
 
+        // Destination File Open
         File output = new File("./test.c");
         FileOutputStream fos = null;
         try{
+            // .hf file open
             File hf = new File("./test.hf");
             buf = new BufferedReader(new FileReader(hf));
             fos = new FileOutputStream(output);
 
+            // .c에 들어가야할 기본적인 문장 작성
             String msg = "#include <stdio.h>\n#include <stdlib.h>\n\nint main(){\n";
             fos.write(string2byte(msg, false));
             while((old_line=buf.readLine()) != null){
@@ -63,8 +67,9 @@ public class hf2c{
                         // Writing Destination
                         String last_token = token_[token_.length-1];
 
+                        // '>', for write res file
                         switch(token_[1]){
-                            // Because of 'white space'
+                            // Use token_[1] because of 'white space'
                             case "echo":
                                 new_line += "echo " + rm_substring(content_) + " > " + rm_substring(last_token);
                                 break;
@@ -94,45 +99,25 @@ public class hf2c{
             try{
                 if(buf != null) {
                     buf.close();
+                    // write and close file
                     fos.write(string2byte("return 0;\n}", false));
                     fos.close();
                 }
             }catch(IOException e){
                 e.printStackTrace();
             }
-/* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-            BufferedReader bReader = null;
-            try {
-
-                String s;
-                File file = new File("test.c");
-                bReader = new BufferedReader(new FileReader(file));
-
-                // 더이상 읽어들일게 없을 때까지 읽어들이게 합니다.
-                while((s = bReader.readLine()) != null) {
-                    System.out.println(s);
-                }
-            } catch(IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (bReader != null) bReader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-/* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
         }
     }
 
     private static String rm_substring(String inputLine){
-        // remove '"' '"'
+        // remove: " "
         String new_line;
         if(inputLine.charAt(0) == '"'){
             new_line = inputLine.substring(1, inputLine.length()-1);
             return new_line;
         }
         else if(inputLine.charAt(1) == '"'){
+            // because of white space
             new_line = inputLine.substring(2, inputLine.length()-1);
             return new_line;
         }
@@ -142,6 +127,7 @@ public class hf2c{
         }
     }
     private static byte[] string2byte(String inputLine, boolean opt){
+        // change string to byte for write (use fos)
         // true : able new line | false : disable new line
         if (opt){
             inputLine += "\");\n";        }
