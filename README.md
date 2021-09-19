@@ -1,15 +1,16 @@
 # 2021_fall
 
-1. Compiler
-  - hw01 : 
+## Compiler
+  - hw01 : converting '.hf' to '.c' in .java
 
-2. Computer Graphics
+## Computer Graphics
+  - week01 : 
+  - week02 :  
+  
+## Machine Learning
   - week01 : 
   - week02 : 
   
-3. Machine Learning
-  - week01 :
-  - week02 : 
-  
-4. Computer Network
+## Computer Network
   - week01 : 
+  - week02 :
