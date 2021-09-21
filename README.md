@@ -8,8 +8,8 @@
   - week02 : 1D, 2D Gaussian filtering 
   
 ## Machine Learning
-  - week01 :
-  - week02 : 
+  - week01 : practice python
+  - week02 : practice pandas & numpy 
   
 ## Computer Network
   - week01 : 
