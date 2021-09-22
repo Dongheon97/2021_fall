@@ -12,4 +12,5 @@
   - week02 : practice pandas & numpy 
   
 ## Computer Network
-  - week01 : 
+  - week01 : practice HTTP & Docker command
+  - week02 : homework Flask GET/POST & Dockerizing(images)
