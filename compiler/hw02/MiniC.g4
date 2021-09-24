@@ -1,7 +1,7 @@
 grammar MiniC;
 
 program	: decl+	   {System.out.println("201702052 Rule 0");} ;
-decl		: var_decl	 {System.out.println("201702052 Rule 1-1");}
+decl		: var_decl
 		| fun_decl	 {System.out.println("201702052 Rule 1-2");};
 var_decl	:  type_spec IDENT ';'       {System.out.println("201702052 Rule 2-1");}
 		| type_spec IDENT '=' LITERAL ';'  {System.out.println("201702052 Rule 2-2");}
@@ -14,34 +14,34 @@ params		: param (',' param)* {System.out.println("201702052 Rule 5-1");}
 		|				{System.out.println("201702052 Rule 5-3");};
 param		: type_spec IDENT {System.out.println("201702052 Rule 6-1");}
 		| type_spec IDENT '[' ']'	{System.out.println("201702052 Rule 6-2");};
-stmt		: expr_stmt
-		| compound_stmt
-		| if_stmt
-		| while_stmt {System.out.println("201702052 Rule 7-1");}
-		| return_stmt {System.out.println("201702052 Rule 7-2");}			;
-expr_stmt	: expr ';'		;
+stmt		: expr_stmt {System.out.println("201702052 Rule 7-1");}
+		| compound_stmt {System.out.println("201702052 Rule 7-2");}
+		| if_stmt {System.out.println("201702052 Rule 7-3");}
+		| while_stmt {System.out.println("201702052 Rule 7-4");}
+		| return_stmt {System.out.println("201702052 Rule 7-5");}			;
+expr_stmt	: expr ';'	{System.out.println("201702052 Rule 8");}	;
 while_stmt	: WHILE '(' expr ')' stmt	{System.out.println("201702052 Rule 9");};
-compound_stmt: '{' local_decl* stmt* '}';
+compound_stmt: '{' local_decl* stmt* '}' {System.out.println("201702052 Rule 10");};
 local_decl	: type_spec IDENT ';'
 		| type_spec IDENT '=' LITERAL ';'
 		| type_spec IDENT '[' LITERAL ']' ';'	;
-if_stmt		: IF '(' expr ')' stmt
-		| IF '(' expr ')' stmt ELSE stmt 		;
+if_stmt		: IF '(' expr ')' stmt {System.out.println("201702052 Rule 11-1 if");}
+		| IF '(' expr ')' stmt ELSE stmt 		{System.out.println("201702052 Rule 11-2 if else");};
 return_stmt	: RETURN ';'
 		| RETURN expr ';'				;
 expr	:  LITERAL
-	| '(' expr ')' {System.out.println("201702052 Rule 14-1");}
+	| '(' expr ')' {System.out.println("201702052 Rule 12-1");}
 	| IDENT
 	| IDENT '[' expr ']'
-	| IDENT '(' args ')' {System.out.println("201702052 Rule 14-2");}
+	| IDENT '(' args ')' {System.out.println("201702052 Rule 12-2");}
 	| '-' expr
-	| '+' expr {System.out.println("201702052 Rule 14-3");}
+	| '+' expr {System.out.println("201702052 Rule 12-3");}
 	| '--' expr
 	| '++' expr
-	| expr '*' expr
+	| expr '*' expr {System.out.println("201702052 Rule 12-4");}
 	| expr '/' expr				 
 	| expr '%' expr				 
-	| expr '+' expr {System.out.println("201702052 Rule 14-4");}
+	| expr '+' expr {System.out.println("201702052 Rule 12-5");}
 	| expr '-' expr
 	| expr EQ expr				
 	| expr NE expr				 
@@ -52,18 +52,18 @@ expr	:  LITERAL
 	| '!' expr					 
 	| expr AND expr				 
 	| expr OR expr				
-	| IDENT '=' expr			
+	| IDENT '=' expr			{System.out.println("201702052 Rule 12-6");}
 	| IDENT '[' expr ']' '=' expr		;
 args	: expr (',' expr)*
 	|				;
 
 VOID: 'void' ;
-INT: 'int' {System.out.println("201702052 Rule 17");};
+INT: 'int' {System.out.println("201702052 Rule 13");};
 
-WHILE: 'while'{System.out.println("201702052 Rule 18");};
+WHILE: 'while'{System.out.println("201702052 Rule 14");};
 IF: 'if' ;
 ELSE: 'else' ;
-RETURN: 'return' {System.out.println("201702052 Rule 21");};
+RETURN: 'return' {System.out.println("201702052 Rule 15");};
 OR: 'or';
 AND: 'and';
 LE: '<=';
