@@ -2,11 +2,13 @@
 
 ## Compiler
   - hw01 : converting '.hf' to '.c' in .java
+  - hw02 : practice MiniC.g4 using 'antlr'
 
 ## Computer Graphics
   - week01 : practice numpy & openCV & matplotlib 
   - week02 : 1D, 2D Gaussian filtering 
-  
+  - week03 : Edge Detection
+
 ## Machine Learning
   - week01 : practice python
   - week02 : practice pandas & numpy 
