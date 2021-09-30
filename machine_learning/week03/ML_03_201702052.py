@@ -40,6 +40,8 @@ print("k=10일 때 테스트 셑의 정확도: {:.2f}".format(kn_10.score(test_i
 iris_mod = pd.read_csv("./iris_mod.csv", header=None)
 dataset_mod = np.array(iris_mod)
 
+print(dataset_mod)
+
 data_mod = dataset_mod[:, 0:4]
 target_mod = dataset_mod[:, 4]
 
@@ -51,8 +53,10 @@ data_max = data_mod.max(axis = 0)
 data_norm = (data_mod - data_min) / (data_max - data_min)
 
 # tarin_test_split
-mod_train_input, mod_test_input, mod_train_target, mod_test_target = train_test_split(data_mod, target_mod, random_state=0)
-norm_train_input, norm_test_input, norm_train_target, norm_test_target = train_test_split(data_norm, target_mod, random_state=0)
+mod_train_input, mod_test_input, mod_train_target, mod_test_target \
+    = train_test_split(data_mod, target_mod, random_state=0)
+norm_train_input, norm_test_input, norm_train_target, norm_test_target \
+    = train_test_split(data_norm, target_mod, random_state=0)
 
 # before normaliation
 mod_kn = KNeighborsClassifier()
