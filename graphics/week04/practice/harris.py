@@ -2,7 +2,9 @@ import cv2
 import numpy as np
 
 def main():
-    src = cv2.imread('../hw/zebra.png')
+    src = cv2.imread('/home/kodo/dongheon/2021_fall/graphics/week04/practice/zebra.png')
+    print(src)
+    cv2.imshow('src', src)
     gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY).astype(np.float32)
 
     dst = cv2.cornerHarris(gray, 3, 3, 0.04)

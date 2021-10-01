@@ -2,11 +2,10 @@ import cv2
 import numpy as np
 
 def main():
-    src = cv2.imread('../hw/zebra.png')
+    src = cv2.imread('./zebra.png')
     gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY).astype(np.float32)
 
     dst = cv2.cornerHarris(gray, 3, 3, 0.04)
-
     dst = cv2.dilate(dst, None)
 
     cv2.imshow('original', src)
@@ -15,6 +14,7 @@ def main():
 
     dst[dst<0.01 * dst.max()] =0
     dst = find_local_maxima(dst, 21)
+
 
     interest_points=np.zeros((dst.shape[0], dst.shape[1], 3))
     interest_points[dst!=0]=[0,0,255]
