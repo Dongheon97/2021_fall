@@ -1,3 +1,7 @@
+# 컴퓨터 그래픽스
+# 컴퓨터공학과
+# 201702052 이동헌
+
 import numpy as np
 import cv2
 
@@ -99,8 +103,8 @@ def HarrisDetector(src, gaus_filter_size = 3, gaus_sigma = 1, alpha = 0.04, thre
     cv2.imshow('201702052 - dst_x_Norm', dst_x_Norm)
     cv2.imshow('201702052 - dst_y_Norm', dst_y_Norm)
     cv2.waitKey()
-    cv2.destroyWindow('dst_x_Norm')
-    cv2.destroyWindow('dst_y_Norm')
+    cv2.destroyWindow('201702052 - dst_x_Norm')
+    cv2.destroyWindow('201702052 - dst_y_Norm')
 
     """
     #ToDo
@@ -119,13 +123,13 @@ def HarrisDetector(src, gaus_filter_size = 3, gaus_sigma = 1, alpha = 0.04, thre
     dst_IxIy_Norm = ((IxIy - np.min(IxIy) )/np.max(IxIy - np.min(IxIy)) * 255 + 0.5).astype(np.uint8)
     cv2.imshow('201702052 - IxIx', IxIx)
     cv2.imshow('201702052 - IyIy', IyIy)
-    #cv2.imshow('IxIy', IxIy)
+    cv2.imshow('201702052 - IxIy', IxIy)
     cv2.imshow('201702052 - dst_IxIy_Norm', dst_IxIy_Norm)
     cv2.waitKey()
-    cv2.destroyWindow('IxIx')
-    cv2.destroyWindow('IyIy')
-    #cv2.destroyWindow('IxIy')
-    cv2.destroyWindow('dst_IxIy_Norm')
+    cv2.destroyWindow('201702052 - IxIx')
+    cv2.destroyWindow('201702052 - IyIy')
+    cv2.destroyWindow('201702052 - IxIy')
+    cv2.destroyWindow('201702052 - dst_IxIy_Norm')
 
     # Gaussian filter
     """
@@ -143,13 +147,13 @@ def HarrisDetector(src, gaus_filter_size = 3, gaus_sigma = 1, alpha = 0.04, thre
     G_dst_IxIy_Norm = ((G_IxIy - np.min(G_IxIy) )/np.max(G_IxIy - np.min(G_IxIy)) * 255 + 0.5).astype(np.uint8)
     cv2.imshow('201702052 - G_IxIx', G_IxIx)
     cv2.imshow('201702052 - G_IyIy', G_IyIy)
-    #cv2.imshow('G_IxIy', G_IxIy)
+    cv2.imshow('201702052 - G_IxIy', G_IxIy)
     cv2.imshow('201702052 - G_dst_IxIy_Norm', G_dst_IxIy_Norm)
     cv2.waitKey()
-    cv2.destroyWindow('G_IxIx')
-    cv2.destroyWindow('G_IyIy')
-    #cv2.destroyWindow('G_IxIy')
-    cv2.destroyWindow('G_dst_IxIy_Norm')
+    cv2.destroyWindow('201702052 - G_IxIx')
+    cv2.destroyWindow('201702052 - G_IyIy')
+    cv2.destroyWindow('201702052 - G_IxIy')
+    cv2.destroyWindow('201702052 - G_dst_IxIy_Norm')
 
     # ornerness function - both eigenvalues are strong
     """
