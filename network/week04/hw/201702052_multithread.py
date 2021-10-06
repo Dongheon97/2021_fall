@@ -1,15 +1,15 @@
-from multiprocessing import Process
+from threading import Thread
 import socket
 import time
 
-def multiprocess_sr(csocket, addr):
+def multithread_sr(csocket, addr):
     data = csocket.recv(1024)
     print(f"[Client {addr} Info] {data.decode()}")
     res = "HTTP/1.1 200 OK\nContent-Type: text/html\n\n"
     csocket.send(res.encode('utf-8'))
     csocket.send(data)
     csocket.close()
-    
+        
 
 def main(port):
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -18,14 +18,15 @@ def main(port):
     req_clients = list()
 
     try:
-        csocket, addr = server_socket.accept()
-        proc = Process(target=multiprocess_sr, args=(csocket, addr,))
-        req_clients.append(proc)
-        proc.start()
+        while True:
+            csocket, addr = server_socket.accept()
+            th = Thread(target=multithread_sr, args=(csocket, addr,))
+            req_clients.append(th)
+            th.start()
 
     except:
-        proc.join()
+        th.join()
 
 if __name__ == '__main__':
-    port = 8890
+    port = 8891
     main(port)
