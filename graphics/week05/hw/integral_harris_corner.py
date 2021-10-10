@@ -77,7 +77,16 @@ def get_integral_image(src):
     # src를 integral로 변경하는 함수
     # 실습 때 진행한 내용입니다.
     ##########################################################################
-    ???
+    h, w = src.shape
+    dst = np.zeros((h, w))
+    for row in range(h):
+        dst[row, 0] = np.sum(src[0:row+1, 0])
+    for col in range(w):
+        dst[0, col] = np.sum(src[0, 0:col+1])
+
+    for row in range(h):
+        for col in range(w):
+            dst[row, col] = src[row, col] + dst[row-1, col] + dst[row, col-1] - dst[row-1, col-1]
 
     return dst
 
@@ -87,7 +96,20 @@ def calc_local_integral_value(src, left_top, right_bottom):
     # integral에서 filter의 요소합 구하기
     # 실습 때 진행한 내용입니다.
     ##########################################################################
-    ???
+    lt_row, lt_col = left_top
+    rb_row, rb_col = right_bottom
+
+    lt_val = src[lt_row-1, lt_col-1]
+    rt_val = src[lt_row-1, rb_col]
+    lb_val = src[rb_row, lt_col-1]
+    rb_val = src[rb_row, rb_col]
+
+    if lt_row == 0:
+        lt_val = 0
+        lb_val = 0
+    if lt_col == 0:
+        lt_val = 0
+        rt_val = 0
     
     return lt_val - lb_val - rt_val + rb_val
 
@@ -121,7 +143,10 @@ def calc_M_harris(IxIx, IxIy, IyIy, fsize = 5):
                     # ToDo
                     # 위의 2중 for문을 참고하여 M 완성
                     ##############################
-                    ???
+                    M[row, col, 0, 0] = np.sum(IxIx_pad[row:row+f_row+1, col:col+f_col+1])
+                    M[row, col, 0, 1] = np.sum(IxIy_pad[row:row+f_row+1, col:col+f_col+1])
+                    M[row, col, 1, 0] = M[row, col, 0, 1]
+                    M[row, col, 1, 1] = np.sum(IyIy_pad[row:row+f_row+1, col:col+f_col+1])
 
     return M
 
@@ -152,8 +177,9 @@ def harris_detector(src, k = 0.04, threshold_rate = 0.01, fsize=5):
             # trace_M 계산
             # R 계산 Harris 방정식 구현
             ##########################################################################
-            det_M =
-            trace_M =
+            print(row / h * 100, '%')
+            det_M = M_harris[row, col, 0, 0] * M_harris[row, col, 1, 1] - (M_harris[row, col, 0, 1]**2)
+            trace_M = M_harris[row, col, 0, 0] + M_harris[row, col, 1, 1]
             R[row, col] = det_M - k * (trace_M * trace_M)
 
     # thresholding
@@ -182,10 +208,10 @@ def calc_M_integral(IxIx_integral, IxIy_integral, IyIy_integral, fsize=5):
     ##########################################################################
     for row in range(h):
         for col in range(w):
-            M[row, col, 0, 0] = ???
-            M[row, col, 0, 1] = ???
+            M[row, col, 0, 0] = M
+            M[row, col, 0, 1] = M
             M[row, col, 1, 0] = M[row, col, 0, 1]
-            M[row, col, 1, 1] = ???
+            M[row, col, 1, 1] = M
 
     return M
 
@@ -227,8 +253,8 @@ def harris_detector_integral(src, k = 0.04, threshold_rate = 0.01, fsize=5):
             # trace_M 계산
             # R 계산 Harris 방정식 구현
             ##########################################################################
-            det_M =
-            trace_M =
+            det_M = M_integral[row, col, 0, 0] * M_integral[row, col, 1, 1] - (M_integral[row, col, 0, 1] ** 2)
+            trace_M = M_integral[row, col, 0, 0] + M_integral[row, col, 1, 1]
             R[row, col] = det_M - k * (trace_M * trace_M)
 
     # thresholding
@@ -242,12 +268,13 @@ def harris_detector_integral(src, k = 0.04, threshold_rate = 0.01, fsize=5):
     return harris_img
 
 def main():
-    src = cv2.imread('../image/zebra.png') # shape : (552, 435, 3)
+    src = cv2.imread('./zebra.png') # shape : (552, 435, 3)
     print('start!')
     harris_img = harris_detector(src)
-    harris_integral_img = harris_detector_integral(src)
-    cv2.imshow('harris_img ' + 여기에 학번을 str형태로 추가해주세요 , harris_img)
-    cv2.imshow('harris_integral_img ' + 여기에 학번을 str형태로 추가해주세요 , harris_integral_img)
+    cv2.imshow('harris_img ' + '201702052', harris_img)
+
+    #harris_integral_img = harris_detector_integral(src)
+    #cv2.imshow('harris_integral_img ' + '201702052', harris_integral_img)
     cv2.waitKey()
     cv2.destroyAllWindows()
 
