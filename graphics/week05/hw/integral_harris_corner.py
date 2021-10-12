@@ -136,17 +136,24 @@ def calc_M_harris(IxIx, IxIy, IyIy, fsize = 5):
     ##########################################################################
     for row in range(h):
         for col in range(w):
-
+            lt = 0
+            rt = 0
+            lb = 0
+            rb = 0
             for f_row in range(fsize):
                 for f_col in range(fsize):
                     ##############################
                     # ToDo
                     # 위의 2중 for문을 참고하여 M 완성
                     ##############################
-                    M[row, col, 0, 0] = np.sum(IxIx_pad[row:row+f_row+1, col:col+f_col+1])
-                    M[row, col, 0, 1] = np.sum(IxIy_pad[row:row+f_row+1, col:col+f_col+1])
-                    M[row, col, 1, 0] = M[row, col, 0, 1]
-                    M[row, col, 1, 1] = np.sum(IyIy_pad[row:row+f_row+1, col:col+f_col+1])
+                    lt += IxIx_pad[row+f_row][col+f_col]
+                    rt += IxIy_pad[row + f_row][col + f_col]
+                    lb += IxIy_pad[row + f_row][col + f_col]
+                    rb += IyIy_pad[row + f_row][col + f_col]
+            M[row, col, 0, 0] = lt
+            M[row, col, 0, 1] = rt
+            M[row, col, 1, 0] = lb
+            M[row, col, 1, 1] = rb
 
     return M
 
@@ -208,10 +215,10 @@ def calc_M_integral(IxIx_integral, IxIy_integral, IyIy_integral, fsize=5):
     ##########################################################################
     for row in range(h):
         for col in range(w):
-            M[row, col, 0, 0] = M
-            M[row, col, 0, 1] = M
+            M[row, col, 0, 0] = calc_local_integral_value(IxIx_integral_pad, (row, col), (row+fsize-1, col+fsize-1))
+            M[row, col, 0, 1] = calc_local_integral_value(IxIy_integral_pad, (row, col), (row+fsize-1, col+fsize-1))
             M[row, col, 1, 0] = M[row, col, 0, 1]
-            M[row, col, 1, 1] = M
+            M[row, col, 1, 1] = calc_local_integral_value(IyIy_integral_pad, (row, col), (row+fsize-1, col+fsize-1))
 
     return M
 
@@ -270,11 +277,11 @@ def harris_detector_integral(src, k = 0.04, threshold_rate = 0.01, fsize=5):
 def main():
     src = cv2.imread('./zebra.png') # shape : (552, 435, 3)
     print('start!')
-    harris_img = harris_detector(src)
-    cv2.imshow('harris_img ' + '201702052', harris_img)
+    #harris_img = harris_detector(src)
+    #cv2.imshow('harris_img ' + '201702052', harris_img)
 
-    #harris_integral_img = harris_detector_integral(src)
-    #cv2.imshow('harris_integral_img ' + '201702052', harris_integral_img)
+    harris_integral_img = harris_detector_integral(src)
+    cv2.imshow('harris_integral_img ' + '201702052', harris_integral_img)
     cv2.waitKey()
     cv2.destroyAllWindows()
 
