@@ -98,8 +98,8 @@ def get_integral_image(src):
     for col in range(w):
         dst[0, col] = np.sum(src[0, 0:col+1])
 
-    for row in range(h):
-        for col in range(w):
+    for row in range(1, h):
+        for col in range(1, w):
             dst[row, col] = src[row, col] + dst[row-1, col] + dst[row, col-1] - dst[row-1, col-1]
 
     return dst
@@ -120,10 +120,10 @@ def calc_local_integral_value(src, left_top, right_bottom):
 
     if lt_row == 0:
         lt_val = 0
-        lb_val = 0
+        rt_val = 0
     if lt_col == 0:
         lt_val = 0
-        rt_val = 0
+        lb_val = 0
     
     return lt_val - lb_val - rt_val + rb_val
 
@@ -179,7 +179,7 @@ def harris_detector(src, k = 0.04, threshold_rate = 0.01, fsize=5):
 
 
     start = time.perf_counter()  # 시간 측정 시작
-    M_harris = calc_M_harris(IxIx, IyIy, IxIy, fsize)
+    M_harris = calc_M_harris(IxIx, IxIy, IyIy, fsize)
     end = time.perf_counter()  # 시간 측정 끝
     print('M_harris time : ', end-start)
 
@@ -192,7 +192,6 @@ def harris_detector(src, k = 0.04, threshold_rate = 0.01, fsize=5):
             # trace_M 계산
             # R 계산 Harris 방정식 구현
             ##########################################################################
-            print(row / h * 100, '%')
 
             det_M = M_harris[row, col, 0, 0] * M_harris[row, col, 1, 1] - (M_harris[row, col, 0, 1]**2)
             trace_M = M_harris[row, col, 0, 0] + M_harris[row, col, 0, 1]
@@ -256,7 +255,7 @@ def harris_detector_integral(src, k = 0.04, threshold_rate = 0.01, fsize=5):
     # ToDo
     # M_integral 완성시키기
     ##############################
-    M_integral = calc_M_integral(IxIx_integral, IyIy_integral, IxIy_integral, fsize)
+    M_integral = calc_M_integral(IxIx_integral, IxIy_integral, IyIy_integral, fsize)
     end = time.perf_counter()  # 시간 측정 끝
     print('M_harris integral time : ', end-start)
 
