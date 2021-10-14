@@ -43,9 +43,13 @@ score_tree = cross_val_score(tree, train_input, train_target, cv=kfold)
 score_forest_1 = cross_val_score(forest_1, train_input, train_target, cv=kfold)
 score_forest_100 = cross_val_score(forest_100, train_input, train_target, cv=kfold)
 
-print("Decision Tree 교차 검증 점수: ", score_tree)
-print("Random Forest 1 교차 검증 점수: ", score_forest_1)
-print("Random Forest 100 교차 검증 점수: ", score_forest_100)
+print("1. Decision Tree 교차 검증 점수: ", score_tree)
+print("2. Random Forest 1 교차 검증 점수: ", score_forest_1)
+print("3. Random Forest 100 교차 검증 점수: ", score_forest_100, '\n')
+
+print("1에서의 교차 검증 점수 평균: ", np.average(score_tree))
+print("2에서의 교차 검증 점수 평균: ", np.average(score_forest_1))
+print("3에서의 교차 검증 점수 평균: ", np.average(score_forest_100), '\n')
 
 # Validate Test Data Using Best Model
 # Train
@@ -55,7 +59,7 @@ forest_100.fit(train_input, train_target)
 predict = forest_100.predict(test_input)
 accuracy = accuracy_score(test_target, predict)
 
-print(f"Test Data에 대한 성능: {accuracy:.8}")
+print("Test Data에 대한 성능: ", accuracy)
 
 #[Plus] List Compare : 1 on 1 (predicted : test data)
 '''print(predict)
@@ -66,8 +70,8 @@ for i in range(len(test_target)):
     if (predict[i] != test_target[i]):
         count += 1
 
-valid_err = (1 - (count / len(test_target)))
-print(f"검증 성능: {valid_err:.8}", )
+calc_accurarcy = (1 - (count / len(test_target)))
+print("직접 계산한 성능: ", calc_accurarcy)
 
 
 
