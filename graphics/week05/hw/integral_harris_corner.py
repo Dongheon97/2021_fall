@@ -55,6 +55,20 @@ def calc_derivatives(src):
     Iy = my_filtering(src, sobel_y)
     return Ix, Iy
 
+def my_get_Gaussian_filter(fshape, sigma=1):
+    (f_h, f_w) = fshape
+    y, x = np.mgrid[-(f_h // 2):(f_h // 2) + 1, -(f_w // 2):(f_w // 2) + 1]
+    #2차 gaussian mask 생성
+    filter_gaus =   1 / (2 * np.pi * sigma**2) * np.exp(-(( x**2 + y**2 )/(2 * sigma**2)))
+    #mask의 총 합 = 1
+    filter_gaus /= np.sum(filter_gaus)
+    return filter_gaus
+
+def GaussianFiltering(src, fshape = (3,3), sigma=1):
+    gaus = my_get_Gaussian_filter(fshape, sigma)
+    dst = my_filtering(src, gaus)
+    return dst
+
 def find_local_maxima(src, ksize):
     (h, w) = src.shape
     pad_img = np.zeros((h+ksize, w+ksize))
@@ -136,24 +150,17 @@ def calc_M_harris(IxIx, IxIy, IyIy, fsize = 5):
     ##########################################################################
     for row in range(h):
         for col in range(w):
-            lt = 0
-            rt = 0
-            lb = 0
-            rb = 0
+
             for f_row in range(fsize):
                 for f_col in range(fsize):
                     ##############################
                     # ToDo
                     # 위의 2중 for문을 참고하여 M 완성
                     ##############################
-                    lt += IxIx_pad[row+f_row][col+f_col]
-                    rt += IxIy_pad[row + f_row][col + f_col]
-                    lb += IxIy_pad[row + f_row][col + f_col]
-                    rb += IyIy_pad[row + f_row][col + f_col]
-            M[row, col, 0, 0] = lt
-            M[row, col, 0, 1] = rt
-            M[row, col, 1, 0] = lb
-            M[row, col, 1, 1] = rb
+                    M[row, col, 0, 0] += IxIx_pad[row + f_row, col + f_col]
+                    M[row, col, 0, 1] += IxIy_pad[row + f_row, col + f_col]
+                    M[row, col, 1, 0] = M[row, col, 0, 1]
+                    M[row, col, 1, 1] += IyIy_pad[row + f_row, col + f_col]
 
     return M
 
@@ -170,6 +177,7 @@ def harris_detector(src, k = 0.04, threshold_rate = 0.01, fsize=5):
     IyIy = Iy**2
     IxIy = Ix * Iy
 
+
     start = time.perf_counter()  # 시간 측정 시작
     M_harris = calc_M_harris(IxIx, IyIy, IxIy, fsize)
     end = time.perf_counter()  # 시간 측정 끝
@@ -185,8 +193,9 @@ def harris_detector(src, k = 0.04, threshold_rate = 0.01, fsize=5):
             # R 계산 Harris 방정식 구현
             ##########################################################################
             print(row / h * 100, '%')
+
             det_M = M_harris[row, col, 0, 0] * M_harris[row, col, 1, 1] - (M_harris[row, col, 0, 1]**2)
-            trace_M = M_harris[row, col, 0, 0] + M_harris[row, col, 1, 1]
+            trace_M = M_harris[row, col, 0, 0] + M_harris[row, col, 0, 1]
             R[row, col] = det_M - k * (trace_M * trace_M)
 
     # thresholding
@@ -247,7 +256,7 @@ def harris_detector_integral(src, k = 0.04, threshold_rate = 0.01, fsize=5):
     # ToDo
     # M_integral 완성시키기
     ##############################
-    M_integral = calc_M_integral(IxIx_integral, IxIy_integral, IyIy_integral, fsize)
+    M_integral = calc_M_integral(IxIx_integral, IyIy_integral, IxIy_integral, fsize)
     end = time.perf_counter()  # 시간 측정 끝
     print('M_harris integral time : ', end-start)
 
@@ -277,8 +286,8 @@ def harris_detector_integral(src, k = 0.04, threshold_rate = 0.01, fsize=5):
 def main():
     src = cv2.imread('./zebra.png') # shape : (552, 435, 3)
     print('start!')
-    #harris_img = harris_detector(src)
-    #cv2.imshow('harris_img ' + '201702052', harris_img)
+    harris_img = harris_detector(src)
+    cv2.imshow('harris_img ' + '201702052', harris_img)
 
     harris_integral_img = harris_detector_integral(src)
     cv2.imshow('harris_integral_img ' + '201702052', harris_integral_img)
