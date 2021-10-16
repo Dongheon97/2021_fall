@@ -12,15 +12,13 @@ from sklearn.metrics import accuracy_score
 # Check & Divide Data
 # 바로 읽은 wdbc.data
 wdbc = pd.read_csv('./wdbc.data', header=None)
-#print(wdbc)
-
 dataset = np.array(wdbc)
 
 # col 0 : ID
 # col 1 : Target (M: 악성, B: 양성)
 # col 2~31 : Data
 
-patient_id = dataset[:, 0]
+#patient_id = dataset[:, 0]
 target = dataset[:, 1]
 data = dataset[:, 2:]
 
@@ -36,8 +34,6 @@ tree = DecisionTreeClassifier(random_state=0)
 # Random Forest
 forest_1 = RandomForestClassifier(n_estimators=1, random_state=0)
 forest_100 = RandomForestClassifier(n_estimators=100, random_state=0)
-
-#bagging = BaggingClassifier(DecisionTreeClassifier(), n_estimators=5, random_state=0)
 
 score_tree = cross_val_score(tree, train_input, train_target, cv=kfold)
 score_forest_1 = cross_val_score(forest_1, train_input, train_target, cv=kfold)
@@ -62,8 +58,6 @@ accuracy = accuracy_score(test_target, predict)
 print("Test Data에 대한 성능: ", accuracy)
 
 #[Plus] List Compare : 1 on 1 (predicted : test data)
-'''print(predict)
-print(test_target,'\n')'''
 count = 0
 
 for i in range(len(test_target)):
@@ -72,8 +66,4 @@ for i in range(len(test_target)):
 
 calc_accurarcy = (1 - (count / len(test_target)))
 print("직접 계산한 성능: ", calc_accurarcy)
-
-
-
-
 
