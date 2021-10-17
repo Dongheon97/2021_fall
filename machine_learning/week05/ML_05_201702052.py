@@ -1,13 +1,13 @@
 import pandas as pd
 import numpy as np
 
-from sklearn.ensemble import BaggingClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import KFold
 from sklearn.metrics import accuracy_score
+#from sklearn.model_selection import KFold
+#from sklearn.ensemble import BaggingClassifier
 
 # Check & Divide Data
 # 바로 읽은 wdbc.data
@@ -25,9 +25,6 @@ data = dataset[:, 2:]
 # Split Data
 train_input, test_input, train_target, test_target = train_test_split(data, target, random_state=0)
 
-# 5-Cross Validation
-kfold = KFold(n_splits=5, shuffle=True, random_state=0)
-
 # Decision Tree
 tree = DecisionTreeClassifier(random_state=0)
 
@@ -35,9 +32,9 @@ tree = DecisionTreeClassifier(random_state=0)
 forest_1 = RandomForestClassifier(n_estimators=1, random_state=0)
 forest_100 = RandomForestClassifier(n_estimators=100, random_state=0)
 
-score_tree = cross_val_score(tree, train_input, train_target, cv=kfold)
-score_forest_1 = cross_val_score(forest_1, train_input, train_target, cv=kfold)
-score_forest_100 = cross_val_score(forest_100, train_input, train_target, cv=kfold)
+score_tree = cross_val_score(tree, train_input, train_target, cv=5)
+score_forest_1 = cross_val_score(forest_1, train_input, train_target, cv=5)
+score_forest_100 = cross_val_score(forest_100, train_input, train_target, cv=5)
 
 print("1. Decision Tree 교차 검증 점수: ", score_tree)
 print("2. Random Forest 1 교차 검증 점수: ", score_forest_1)
@@ -57,13 +54,14 @@ accuracy = accuracy_score(test_target, predict)
 
 print("Test Data에 대한 성능: ", accuracy)
 
+'''
 #[Plus] List Compare : 1 on 1 (predicted : test data)
 count = 0
-
 for i in range(len(test_target)):
     if (predict[i] != test_target[i]):
         count += 1
 
 calc_accurarcy = (1 - (count / len(test_target)))
 print("직접 계산한 성능: ", calc_accurarcy)
+'''
 
