@@ -1,3 +1,6 @@
+# [CG] 201702052 5주차 과제
+# 201702052 이동헌
+
 import numpy as np
 import cv2
 import time
@@ -194,7 +197,7 @@ def harris_detector(src, k = 0.04, threshold_rate = 0.01, fsize=5):
             ##########################################################################
 
             det_M = M_harris[row, col, 0, 0] * M_harris[row, col, 1, 1] - (M_harris[row, col, 0, 1]**2)
-            trace_M = M_harris[row, col, 0, 0] + M_harris[row, col, 0, 1]
+            trace_M = M_harris[row, col, 0, 0] + M_harris[row, col, 1, 1]
             R[row, col] = det_M - k * (trace_M * trace_M)
 
     # thresholding
