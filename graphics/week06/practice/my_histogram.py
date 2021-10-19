@@ -65,7 +65,7 @@ def show_patch_hist(patch_vector):
     plt.title('orientation histogram')
     plt.show()
 
-'''
+
 def main():
     src = cv2.imread('Lena.png')
     gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
@@ -137,7 +137,7 @@ def main():
 
     h, w = patch.shape[:2]
     vector_size = int(360)
-
+'''
 
 
 if __name__ == '__main__':
