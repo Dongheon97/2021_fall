@@ -6,7 +6,6 @@ import org.antlr.v4.runtime.tree.ParseTreeProperty;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 public class MiniCPrintListener extends MiniCBaseListener {
     ParseTreeProperty<String> newTexts = new ParseTreeProperty<String>();
@@ -15,7 +14,7 @@ public class MiniCPrintListener extends MiniCBaseListener {
     private static int indent_count = 0;
 
     // print indentation
-    private String printDot(){
+    private String printIndent(){
         String output = "";
         for(int i=0; i<indent_count; i++){
             output += "....";
@@ -104,18 +103,12 @@ public class MiniCPrintListener extends MiniCBaseListener {
     }
 
     @Override
-    public void enterFun_decl(MiniCParser.Fun_declContext ctx){
-        //indent_count += 1;
-    }
-
-    @Override
     public void exitFun_decl(MiniCParser.Fun_declContext ctx) {
         // init String
         String output = "";
         output += newTexts.get(ctx.type_spec())+" "+ctx.getChild(1).getText()+ctx.getChild(2).getText()
                 + newTexts.get(ctx.params()) + ctx.getChild(4).getText() +new_line+ newTexts.get(ctx.compound_stmt());
         newTexts.put(ctx, output);
-        //indent_count -= 1;
     }
 
     @Override
@@ -168,7 +161,6 @@ public class MiniCPrintListener extends MiniCBaseListener {
         newTexts.put(ctx, output);
     }
 
-
     @Override
     public void exitStmt(MiniCParser.StmtContext ctx) {
         // init String
@@ -176,11 +168,11 @@ public class MiniCPrintListener extends MiniCBaseListener {
             if(ctx.getChildCount() > 0){
                 // stmt Rule 1 : expr_stmt
                 if(ctx.expr_stmt() != null){
-                    output += newTexts.get(ctx.expr_stmt());
+                    output += printIndent() + newTexts.get(ctx.expr_stmt());
                 }
                 // stmt Rule 2 : compound_stmt
                 else if(ctx.compound_stmt() != null){
-                    output += newTexts.get(ctx.compound_stmt());
+                    output += printIndent() + newTexts.get(ctx.compound_stmt());
                 }
                 // stmt Rule 3 : if_stmt
                 else if(ctx.if_stmt() != null){
@@ -194,7 +186,6 @@ public class MiniCPrintListener extends MiniCBaseListener {
                 else if(ctx.return_stmt() != null){
                     output += newTexts.get(ctx.return_stmt());
                 }
-
             }
         newTexts.put(ctx, output);
     }
@@ -208,35 +199,24 @@ public class MiniCPrintListener extends MiniCBaseListener {
     }
 
     @Override
-    public void enterWhile_stmt(MiniCParser.While_stmtContext ctx) {
-        // indentation depth + 1
-        indent_count += 1;
-    }
-
-    @Override
     public void exitWhile_stmt(MiniCParser.While_stmtContext ctx) {
         // init
         String output ="";
-        // indentation
-//        indent_count -= 1;
-//
-//        output += ctx.getChild(0).getText();
-//        indent_count += 1;
 
-
-
-        output += ctx.WHILE().getText() + " " + ctx.getChild(1).getText()
+        // while ( expr )
+        output += printIndent() +ctx.WHILE().getText() + " " + ctx.getChild(1).getText()
                 + newTexts.get(ctx.expr()) + ctx.getChild(3).getText() + new_line;
 
+        // stmt - compound
         output += newTexts.get(ctx.stmt());
 
         newTexts.put(ctx, output);
-        indent_count -=1;
     }
 
     @Override
     public void enterCompound_stmt(MiniCParser.Compound_stmtContext ctx) {
         // indentation depth + 1
+        indent_count += 1;
     }
 
     @Override
@@ -246,29 +226,25 @@ public class MiniCPrintListener extends MiniCBaseListener {
         // stmt pointer
         int stmt_count =0;
         // '{'
-        String output = printDot()+ctx.getChild(0).getText()+ new_line;
-        indent_count +=1;
+        String output = ctx.getChild(0).getText()+ new_line;
 
         // local_decl* stmt*
         for(int i=1; i<ctx.getChildCount()-1; i++){
             if(ctx.local_decl().contains(ctx.getChild(i))){
                 // local_decl*
-                output += printDot() + newTexts.get(ctx.local_decl(local_count));
+                output += printIndent() +newTexts.get(ctx.local_decl(local_count));
                 local_count += 1;
             }
             else if(ctx.stmt().contains(ctx.getChild(i))) {
                 // stmt*
-                output += printDot() + newTexts.get(ctx.stmt(stmt_count));
+                output += newTexts.get(ctx.stmt(stmt_count));
                 stmt_count += 1;
             }
         }
-        // indentation depth - 1
-        indent_count -= 1;
         // }
-        output += printDot()+ ctx.getChild(ctx.getChildCount()-1) + new_line;
+        indent_count -= 1;
+        output += printIndent() + ctx.getChild(ctx.getChildCount()-1) + new_line;
         newTexts.put(ctx, output);
-
-
     }
 
     @Override public void exitLocal_decl(MiniCParser.Local_declContext ctx) {
@@ -296,44 +272,47 @@ public class MiniCPrintListener extends MiniCBaseListener {
     }
 
     @Override
-    public void enterIf_stmt(MiniCParser.If_stmtContext ctx) {
-        // indentation depth + 1
-        indent_count += 1;
-    }
-
-    @Override
     public void exitIf_stmt(MiniCParser.If_stmtContext ctx) {
-        // init
-        String output = ctx.IF().getText() + " " + ctx.getChild(1).getText()
-                + newTexts.get(ctx.expr()) + ctx.getChild(3).getText() + new_line;
-        String stmt_output = "";
+         String output = "";
         int len = ctx.getChildCount();
-        int stmt_count = ctx.stmt().size();
 
-        // if_stmt Rule 1
+        // if_stmt Rule 1 : IF ( expr ) stmt
         if(len == 5){
-            if(stmt_count == 1){
-                output += indent + newTexts.get(ctx.stmt(0));
-            }
-            else if(stmt_count > 1){
-                for(int i=0; i<stmt_count; i++){
-                    stmt_output += indent + newTexts.get(ctx.stmt(i)) + new_line;
-                }
-                output += stmt_output;
-            }
-        }
-        indent_count -= 1;
-        newTexts.put(ctx, output);
-    }
+            // IF ( expr )
+            output += printIndent() + ctx.IF().getText() + " " + ctx.getChild(1).getText()
+                    + newTexts.get(ctx.expr()) + ctx.getChild(3).getText() + new_line;
+            // stmt
+            output += newTexts.get(ctx.stmt(0));
 
+            newTexts.put(ctx, output);
+        }
+
+        // if_stmt Rule 2 : IF ( expr ) stmt ELSE stmt
+        else if(len == 7){
+
+            // IF ( expr )
+            output += printIndent() + ctx.IF().getText() + " " + ctx.getChild(1).getText()
+                    + newTexts.get(ctx.expr()) + ctx.getChild(3).getText() + new_line;
+            // stmt 1
+            output += newTexts.get(ctx.stmt(0));
+
+            // ELSE
+            output += ctx.ELSE().getText() + new_line;
+
+            // stmt 2
+            output += newTexts.get(ctx.stmt(1));
+
+            newTexts.put(ctx, output);
+        }
+    }
 
     @Override
     public void exitReturn_stmt(MiniCParser.Return_stmtContext ctx) {
         // init
         String output = "";
         String rtn = ctx.RETURN().getText();
-
         int len = ctx.getChildCount();
+
         // return_stmt Rule 1
         if(len == 2){
             output += rtn + ctx.getChild(1).getText();
@@ -342,6 +321,7 @@ public class MiniCPrintListener extends MiniCBaseListener {
             output += rtn  + " " + newTexts.get(ctx.expr())+ctx.getChild(2);
         }
         newTexts.put(ctx, output+new_line);
+
     }
 
     @Override
@@ -415,9 +395,6 @@ public class MiniCPrintListener extends MiniCBaseListener {
         else{
             // do nothing
         }
-
         newTexts.put(ctx, output);
     }
-
-
 }

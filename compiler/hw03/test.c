@@ -1,19 +1,27 @@
-int main(int x, int y){
-y = 8;
-c[2];
-c[10]= 30;
-x = x + y;
-
-    while(true){
-        a+1;
-        a<b;
-        while(true){
-            a = a+b+1;
+int max=500;
+void main(){
+    int i;
+    int j;
+    int k;
+    int rem;
+    int sum;
+    i = 2;
+    while(i <= max){
+        sum = 0;
+        k = i/2;
+        j = i;
+        while(j<=k){
+            rem = i%j;
+            if(rem ==0){
+                sum = sum + j;
+                ++j;
+            }
         }
+        if(i==sum){
+            write(i);
+        }
+        ++i;
     }
-
-
-    return i;
 }
 
 /*
@@ -22,6 +30,26 @@ c[2];
 c[10]= 30;
 x = x + y;
 
+while(true){
+    a = a+b;
+    --a;
+    while(true){
+        b=13;
+        b = a+b;
+    }
+}
+
+if(a<b){
+          a = 1;
+          ++a;
+          b = a+b;
+      }
+      else{
+          b = 1;
+          --b;
+          a = b-a;
+      }
+
 int a;
 int b=2;
 int c[30];
@@ -29,11 +57,16 @@ int main(int x, int y){
     int i;
     int j = 0;
     int k[10];
-if (a==b) a=b;
+    if (a==b) a=b;
     if(a<b){
         a = 1;
         ++a;
         b = a+b;
+    }
+    else{
+        b = 1;
+        --b;
+        a = b-a;
     }
     return i;
 }
