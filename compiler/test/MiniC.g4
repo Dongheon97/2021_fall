@@ -33,30 +33,30 @@ if_stmt		: IF '(' expr ')' stmt
 		| IF '(' expr ')' stmt ELSE stmt 		;
 return_stmt	: RETURN ';'			
 		| RETURN expr ';'				;
-expr	:  LITERAL				
-	| '(' expr ')'				 
-	| IDENT				 
-	| IDENT '[' expr ']'			 
-	| IDENT '(' args ')'			
-	| '-' expr				 
-	| '+' expr				 
-	| '--' expr				 
-	| '++' expr				 
-	| expr '*' expr				 
-	| expr '/' expr				 
-	| expr '%' expr				 
-	| expr '+' expr				 
-	| expr '-' expr				 
-	| expr EQ expr				
-	| expr NE expr				 
-	| expr LE expr				 
-	| expr '<' expr				 
-	| expr GE expr				 
-	| expr '>' expr				 
-	| '!' expr					 
-	| expr AND expr				 
-	| expr OR expr				
-	| IDENT '=' expr			
+expr	:  LITERAL
+	| '(' expr ')'
+	| IDENT
+	| IDENT '[' expr ']'
+	| IDENT '(' args ')'
+	| '-' expr
+	| '+' expr
+	| '--' expr
+	| '++' expr
+	| expr '*' expr
+	| expr '/' expr
+	| expr '%' expr
+	| expr '+' expr
+	| expr '-' expr
+	| expr EQ expr
+	| expr NE expr
+	| expr LE expr
+	| expr '<' expr
+	| expr GE expr
+	| expr '>' expr
+	| '!' expr
+	| expr AND expr
+	| expr OR expr
+	| IDENT '=' expr
 	| IDENT '[' expr ']' '=' expr		;
 args	: expr (',' expr)*			 
 	|					 ;
