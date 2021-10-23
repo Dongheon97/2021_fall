@@ -59,6 +59,7 @@ def calc_derivatives(src):
     Iy = my_filtering(src, sobel_y)
     return Ix, Iy
 
+
 def show_patch_hist(patch_vector):
     index = np.arange(len(patch_vector))
     plt.bar(index, patch_vector)
