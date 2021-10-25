@@ -134,7 +134,6 @@ def SIFT(src):
                 # index = patch 마다 8개 angle + 해당 각도
                 index = (filter_num * 8) + int(descriptor_angle[p_y, p_x])
 
-                # vector 에 appending
                 descriptors[i, index] += magnitude[p_y, p_x] * gaussian_weight
 
     return keypoints, descriptors
