@@ -57,6 +57,9 @@ def SIFT(src):
     angle = np.rad2deg(angle)  # radian 값을 degree로 변경 > -180 ~ 180도로 표현
     angle = (angle + 360) % 360  # -180 ~ 180을 0 ~ 360의 표현으로 변경
 
+    # @@@@ descriptor_angle 선언 @@@@
+    descriptor_angle = np.zeros(angle.shape)
+
     # keypoint 방향
     print('calculate orientation assignment')
     for i in range(len(keypoints)):
@@ -79,16 +82,14 @@ def SIFT(src):
         ## np.max(find value), np.argmax(find index)를 활용하면 쉽게 구할 수 있음
         ## keypoints[i].angle = ???
         ###################################################################
-        print(orient_hist)
-        max_angle = np.argmax(orient_hist) # histogram의 index = angle
+        max_angle = orient_hist.argmax()  # histogram's column = angle / 10
         max_value = orient_hist[max_angle]
-        keypoints[i].angle = max_angle
+        keypoints[i].angle = int(max_angle) * 10  # histogram's column = 360 / 10
+        # 0.8일 때도 추가
         thres = max_value * 0.8
         for i in range(len(orient_hist)):
             if(orient_hist[i] > thres):
-
-
-
+                keypoints.append(KeyPoint(x, y, size, i*10, response, octave, class_id)) # i * 10 => angle
 
     print('calculate descriptor')
     descriptors = np.zeros((len(keypoints), 128))  # 8 orientation * 4 * 4 = 128 dimensions
@@ -118,6 +119,23 @@ def SIFT(src):
                 ## 최종적으로 128개 (8개의 orientation * 4 * 4)의 descriptor를 가짐
                 ## gaussian_weight = np.exp((-1 / 16) * (row_rot ** 2 + col_rot ** 2))
                 ###################################################################
+                gaussian_weight = np.exp((-1/16) * (row_rot ** 2 + col_rot ** 2))
+
+                # 조정한 point에서 angle과 magnitude를 가져온다.
+                descriptor_angle[p_y, p_x] = angle[p_y, p_x] - keypoints[i].angle
+                # 8개의 histogram으로 나타내기 위해 / 45
+                descriptor_angle[p_y, p_x] /= 45
+
+                # counting filter_num
+                patch_row = (row+8) // 4    # -8 <= row < 8
+                patch_col = (col+8) // 4    # -8 <= col < 8
+                filter_num = patch_row*4 + patch_col
+
+                # index = patch 마다 8개 angle + 해당 각도
+                index = (filter_num * 8) + int(descriptor_angle[p_y, p_x])
+
+                # vector 에 appending
+                descriptors[i, index] += magnitude[p_y, p_x] * gaussian_weight
 
     return keypoints, descriptors
 
