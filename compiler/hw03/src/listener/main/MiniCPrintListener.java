@@ -176,15 +176,15 @@ public class MiniCPrintListener extends MiniCBaseListener {
                 }
                 // stmt Rule 3 : if_stmt
                 else if(ctx.if_stmt() != null){
-                    output += newTexts.get(ctx.if_stmt());
+                    output += printIndent() + newTexts.get(ctx.if_stmt());
                 }
                 // stmt Rule 4 : while_stmt
                 else if(ctx.while_stmt() != null){
-                    output += newTexts.get(ctx.while_stmt());
+                    output += printIndent() +newTexts.get(ctx.while_stmt());
                 }
                 // stmt Rule 5 : return_stmt
                 else if(ctx.return_stmt() != null){
-                    output += newTexts.get(ctx.return_stmt());
+                    output += printIndent() + newTexts.get(ctx.return_stmt());
                 }
             }
         newTexts.put(ctx, output);
@@ -204,7 +204,7 @@ public class MiniCPrintListener extends MiniCBaseListener {
         String output ="";
 
         // while ( expr )
-        output += printIndent() +ctx.WHILE().getText() + " " + ctx.getChild(1).getText()
+        output += ctx.WHILE().getText() + " " + ctx.getChild(1).getText()
                 + newTexts.get(ctx.expr()) + ctx.getChild(3).getText() + new_line;
 
         // stmt - compound
@@ -241,7 +241,7 @@ public class MiniCPrintListener extends MiniCBaseListener {
                 stmt_count += 1;
             }
         }
-        // }
+        // '}'
         indent_count -= 1;
         output += printIndent() + ctx.getChild(ctx.getChildCount()-1) + new_line;
         newTexts.put(ctx, output);
@@ -279,7 +279,7 @@ public class MiniCPrintListener extends MiniCBaseListener {
         // if_stmt Rule 1 : IF ( expr ) stmt
         if(len == 5){
             // IF ( expr )
-            output += printIndent() + ctx.IF().getText() + " " + ctx.getChild(1).getText()
+            output += ctx.IF().getText() + " " + ctx.getChild(1).getText()
                     + newTexts.get(ctx.expr()) + ctx.getChild(3).getText() + new_line;
             // stmt
             output += newTexts.get(ctx.stmt(0));
@@ -291,7 +291,7 @@ public class MiniCPrintListener extends MiniCBaseListener {
         else if(len == 7){
 
             // IF ( expr )
-            output += printIndent() + ctx.IF().getText() + " " + ctx.getChild(1).getText()
+            output += ctx.IF().getText() + " " + ctx.getChild(1).getText()
                     + newTexts.get(ctx.expr()) + ctx.getChild(3).getText() + new_line;
             // stmt 1
             output += newTexts.get(ctx.stmt(0));
