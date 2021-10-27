@@ -1,3 +1,6 @@
+# 201702052 이 동 헌
+# SIFT
+
 import cv2
 import numpy as np
 from cv2 import KeyPoint
