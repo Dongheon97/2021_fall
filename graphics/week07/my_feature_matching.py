@@ -144,9 +144,4 @@ def main():
 
 
 if __name__ == '__main__':
-    a = 2.1
-    b = 2.4
-    c = 2.5
-    d = 2.9
-    print(int(a), int(b), int(c), int(d))
     main()

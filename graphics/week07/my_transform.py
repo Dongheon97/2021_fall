@@ -29,37 +29,35 @@ def transformation_backward(src, M):
     h, w, c = src.shape
     rate = 2
     dst = np.zeros((int(h * rate), int(w * rate), c))
-
     h_, w_ = dst.shape[:2]
-
     print("backward calc")
+
     for row_ in range(h_):
         for col_ in range(w_):
             xy = (np.linalg.inv(M)).dot(np.array([[col_, row_, 1]]).T)
             x = xy[0, 0]
             y = xy[1, 0]
 
-            # pixel의 값을 가져오기 위해서 bilinear 연산을 통해서 값을 가져옴
             floorX = int(x)
             floorY = int(y)
 
             t, s = x - floorX, y - floorY
 
-            zz = (1-t) * (1-s)
-            zo = t * (1-s)
-            oz = (1-t) * s
+            zz = (1 - t) * (1 - s)
+            zo = t * (1 - s)
+            oz = (1 - t) * s
             oo = t * s
-            if floorY < 0 or floorX < 0 or (floorY + 1) >= h or (floorX + 1) >= w:
+
+            if floorY < 0 or floorX < 0 or floorY + 1 >= h or floorX + 1 >= w:
                 continue
 
-            interVal = src[floorY, floorX, :]*zz + src[floorY, floorX+1, :]*zo + \
-                src[floorY+1, floorX, :]*oz + src[floorY+1, floorX+1, :]*oo
+            interval = src[floorY, floorX, :] * zz + src[floorY, floorX + 1, :] * zo \
+                       + src[floorY + 1, floorX, :] * oz + src[floorY + 1, floorX + 1, :] * oo
 
-            dst[row_, col_, :] = interVal
+            dst[row_, col_, :] = interval
 
-    dst = ((dst - np.min(dst)) / (np.max(dst - np.min(dst)) * 255 + 0.5) )  # normalization
+    dst = ((dst - np.min(dst)) / np.max(dst - np.min(dst)) * 255 + 0.5)
     return dst.astype(np.uint8)
-
 
 def transformation_forward(src, M):
     h, w, c = src.shape

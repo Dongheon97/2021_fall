@@ -35,8 +35,8 @@ def backward(img1, M):
 
     for row in range(h):
         for col in range(w):
-            xy_prime = ???
-            xy = ???
+            xy_prime = np.array([[col, row, 1]]).T
+            xy = (np.linalg.inv(M)).dot(xy_prime)
 
             x_ = xy[0, 0]
             y_ = xy[1, 0]
@@ -61,13 +61,24 @@ def my_ls(matches, kp1, kp2):
     A = []
     B = []
     for idx, match in enumerate(matches):
-        ???
+        trainInd = match.trainIdx
+        queryInd = match.queryIdx
+
+        x, y = kp1[queryInd].pt
+        x_prime, y_prime = kp2[trainInd].pt
+
+        A.append([x, y, 1, 0, 0, 0])
+        A.append([0, 0, 0, x, y, 1])
+        B.append([x_prime])
+        B.append([y_prime])
 
     A = np.array(A)
     B = np.array(B)
 
     try:
-        ???
+        ATA = np.dot(A.T, A)
+        ATB = np.dot(A.T, B)
+        X = np.dot(np.linalg.inv(ATA), ATB)
     except:
         print('can\'t calculate np.linalg.inv((np.dot(A.T, A)) !!!!!')
         X = None
@@ -81,7 +92,11 @@ def get_matching_keypoints(img1, img2, keypoint_num):
     :param keypoint_num: 추출한 keypoint의 수
     :return: img1의 특징점인 kp1, img2의 특징점인 kp2, 두 특징점의 매칭 결과
     '''
-    sift = cv2.xfeatures2d.SIFT_create(keypoint_num)
+    # opencv-contrib-python version : 3.4.2.16
+    #sift = cv2.xfeatures2d.SIFT_create(keypoint_num)
+
+    # opencv-contrib-python version > 3.4.2.16
+    sift = cv2.SIFT_create(keypoint_num)
 
     kp1, des1 = sift.detectAndCompute(img1, None)
     kp2, des2 = sift.detectAndCompute(img2, None)
@@ -106,7 +121,11 @@ def get_matching_keypoints(img1, img2, keypoint_num):
 def feature_matching(img1, img2, keypoint_num=None):
     kp1, kp2, matches = get_matching_keypoints(img1, img2, keypoint_num)
 
-    ???
+    X = my_ls(matches, kp1, kp2)
+
+    M = np.array([[X[0][0], X[1][0], X[2][0]],
+                  [X[3][0], X[4][0], X[5][0]],
+                  [0, 0, 1]])
 
     result = backward(img1, M)
     return result.astype(np.uint8)
@@ -138,9 +157,10 @@ def feature_matching_RANSAC(img1, img2, keypoint_num=None, iter_num=500, thresho
         ########################################################################
         random.shuffle(matches_shuffle)
         three_points = matches_shuffle[:3]
-        ???
+        #???
 
-    best_M = ???
+    best_M = img1
+    #best_M = ???
 
     result = backward(img1, best_M)
     return result.astype(np.uint8)
@@ -152,11 +172,11 @@ def main():
     src = cv2.imread('Lena.png')
     src2 = cv2.imread('LenaFaceShear.png')
 
-    result_RANSAC = feature_matching_RANSAC(src, src2)
+    #result_RANSAC = feature_matching_RANSAC(src, src2)
     result_LS = feature_matching(src, src2)
     cv2.imshow('input', src)
-    cv2.imshow('result RANSAC 2021000000', result_RANSAC)
-    cv2.imshow('result LS 2021000000', result_LS)
+    #cv2.imshow('result RANSAC 201702052', result_RANSAC)
+    cv2.imshow('result LS 201702052', result_LS)
     cv2.imshow('goal', src2)
     cv2.waitKey()
     cv2.destroyAllWindows()
