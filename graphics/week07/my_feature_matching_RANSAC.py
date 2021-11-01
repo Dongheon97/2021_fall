@@ -155,12 +155,41 @@ def feature_matching_RANSAC(img1, img2, keypoint_num=None, iter_num=500, thresho
         # 3. 2에서 구한 M을 모든 matches point와 연산하여 inlier의 개수를 파악
         # 4. iter_num 반복하여 가장 많은 inlier를 가지는 M을 최종 affine matrix로 채택
         ########################################################################
+        # 1.1 matching 되는 점을 임의로 섞는다.
         random.shuffle(matches_shuffle)
+        # 1.2 3개를 뽑아낸다.
         three_points = matches_shuffle[:3]
-        #???
+        # 2. 1에서 뽑은 matches 를 이용하여 affine matrix M을 구함
+        X = my_ls(three_points, kp1, kp2)
+        affineM = np.array([ [X[0][0], X[1][0], X[2][0]],
+                             [X[3][0], X[4][0], X[5][0]],
+                             [0, 0, 1] ])
+        # 3. 2에서 구한 affine을 모든 matches point와 연산하여 inlier의 개수를 파악
+        count = 0
+        for idx, match in enumerate(matches):
+            trainInd = match.trainIdx
+            queryInd = match.queryIdx
 
-    best_M = img1
-    #best_M = ???
+            x, y = kp1[queryInd].pt
+            x_, y_ = kp2[trainInd].pt
+
+            # x, y로 x_prime, y_prime 연산
+            xy = np.array([[x, y, 1]]).T
+            xy_prime = np.dot(affineM, xy)
+            x_prime = xy_prime[0][0]
+            y_prime = xy_prime[1][0]
+
+            # [x_, y_]과 계산된 [x_prime, y_prime]의 L2_distance 계산
+            distance = L2_distance(np.array([x_, y_]), np.array([x_prime, y_prime]))
+
+            # check threshold_distance
+            if(distance < threshold_distance):
+                count += 1
+        inliers.append(count)
+        M_list.append(affineM)
+
+    maxColumn = np.argmax(inliers)
+    best_M = M_list[maxColumn]
 
     result = backward(img1, best_M)
     return result.astype(np.uint8)
@@ -172,10 +201,10 @@ def main():
     src = cv2.imread('Lena.png')
     src2 = cv2.imread('LenaFaceShear.png')
 
-    #result_RANSAC = feature_matching_RANSAC(src, src2)
+    result_RANSAC = feature_matching_RANSAC(src, src2)
     result_LS = feature_matching(src, src2)
     cv2.imshow('input', src)
-    #cv2.imshow('result RANSAC 201702052', result_RANSAC)
+    cv2.imshow('result RANSAC 201702052', result_RANSAC)
     cv2.imshow('result LS 201702052', result_LS)
     cv2.imshow('goal', src2)
     cv2.waitKey()

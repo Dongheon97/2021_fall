@@ -33,8 +33,7 @@ def backward(img1, M):
     :return: 변환된 이미지
     '''
     h, w, c = img1.shape
-    result = np.zeros((h, w, c))
-
+    result = np.zeros((h-1, w, c))
     for row in range(h):
         for col in range(w):
             xy_prime = np.array([[col, row, 1]]).T
