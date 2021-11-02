@@ -1,3 +1,5 @@
+# 201702052 이동헌
+
 import numpy as np
 import cv2
 import random
@@ -141,6 +143,9 @@ def feature_matching_RANSAC(img1, img2, keypoint_num=None, iter_num=500, thresho
     '''
     kp1, kp2, matches = get_matching_keypoints(img1, img2, keypoint_num)
 
+    h = img2.shape[0]
+    w = img2.shape[1]
+
     matches_shuffle = matches.copy()
 
     inliers = [] #랜덤하게 고른 n개의 point로 구한 inlier개수 결과를 저장
@@ -158,9 +163,9 @@ def feature_matching_RANSAC(img1, img2, keypoint_num=None, iter_num=500, thresho
         # 1.1 matching 되는 점을 임의로 섞는다.
         random.shuffle(matches_shuffle)
         # 1.2 3개를 뽑아낸다.
-        three_points = matches_shuffle[:3]
+        rand_three = matches_shuffle[:3]
         # 2. 1에서 뽑은 matches 를 이용하여 affine matrix M을 구함
-        X = my_ls(three_points, kp1, kp2)
+        X = my_ls(rand_three, kp1, kp2)
         affineM = np.array([ [X[0][0], X[1][0], X[2][0]],
                              [X[3][0], X[4][0], X[5][0]],
                              [0, 0, 1] ])
@@ -179,6 +184,10 @@ def feature_matching_RANSAC(img1, img2, keypoint_num=None, iter_num=500, thresho
             x_prime = xy_prime[0][0]
             y_prime = xy_prime[1][0]
 
+            # exception
+            if x_prime < 0 or y_prime < 0 or x_prime >= w or y_prime >= h:
+                continue
+
             # [x_, y_]과 계산된 [x_prime, y_prime]의 L2_distance 계산
             distance = L2_distance(np.array([x_, y_]), np.array([x_prime, y_prime]))
 
@@ -188,6 +197,7 @@ def feature_matching_RANSAC(img1, img2, keypoint_num=None, iter_num=500, thresho
         inliers.append(count)
         M_list.append(affineM)
 
+    # 4. iter_num 반복하여 가장 많은 inlier를 가지는 M을 최종 affine matrix로 채택
     maxColumn = np.argmax(inliers)
     best_M = M_list[maxColumn]
 
@@ -198,8 +208,8 @@ def L2_distance(vector1, vector2):
     return np.sqrt(np.sum((vector1-vector2)**2))
 
 def main():
-    src = cv2.imread('Lena.png')
-    src2 = cv2.imread('LenaFaceShear.png')
+    src = cv2.imread('library1.jpg')
+    src2 = cv2.imread('library2.jpg')
 
     result_RANSAC = feature_matching_RANSAC(src, src2)
     result_LS = feature_matching(src, src2)
