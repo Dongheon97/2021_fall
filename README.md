@@ -12,6 +12,7 @@
   - week04 : Harris Corner Detection
   - week05 : Integral images & Harris Corner Detection
   - week06 : SIFT
+  - week07 : RANSAC 
 
 ## Machine Learning
   - week01 : practice python
