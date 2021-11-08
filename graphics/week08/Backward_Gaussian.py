@@ -43,9 +43,7 @@ def backward_gaussian(img1, M):
     gaus2D = my_get_Gaussian2D_mask(5)
     mask = np.zeros((5, 5, c), dtype=np.uint8)
     pad_img1 = my_3D_padding(img1, mask)
-    #cv2.imshow('padding', pad_img1)
-    #cv2.imshow('src', img1)
-    #cv2.waitKey()
+
     for row in range(h2):
         for col in range(w2):
             xy_prime = np.array([[col, row, 1]]).T
@@ -57,20 +55,16 @@ def backward_gaussian(img1, M):
             if x_ < 0 or y_ < 0 or (x_ + 1) >= w or (y_ + 1) >= h:
                 continue
 
-            # get 5 x 5 mask
+            # get 5 x 5 mask using bilinear
             for i in range(5):
                 for j in range(5):
                     mask[i, j, :] = my_bilinear(pad_img1, (x_)+i, (y_)+j)
 
             # gaussian 2D filtering
-            #insert = np.zeros((1, 3))
             for i in range(c):
                 filtered = (mask[:, :, i]*gaus2D)
                 dst = np.sum(filtered.astype(np.uint8))
                 result[row, col, i] = dst
-                #insert.append(dst)
-                #print(insert)
-            #result[row, col, :] = insert
 
     return result
 
