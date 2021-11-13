@@ -4,6 +4,7 @@
   - hw01 : Converting '.hf' to '.c' in .java
   - hw02 : Practice MiniC.g4 using 'antlr'
   - hw03 : Pretty Print MiniC using antlr
+  - hw04 : Javabyte Code
 
 ## Computer Graphics
   - week01 : practice numpy & openCV & matplotlib 
