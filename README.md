@@ -18,14 +18,14 @@
   - week10 : Convolution Layer
 
 ## Machine Learning
-  - week01 : practice python
-  - week02 : practice pandas & numpy
-  - week03 : KNN Classifier & Normalization 
-  - week04 : Decision Tree
-  - week05 : Random Forest
-  - week06 : K-Means Clustering
-  - week07 : Support Vector Machine
-  - week08 : Text Data
+  - lab01 : practice python
+  - lab02 : practice pandas & numpy
+  - lab03 : KNN Classifier & Normalization 
+  - lab04 : Decision Tree
+  - lab05 : Random Forest
+  - lab06 : K-Means Clustering
+  - lab07 : Support Vector Machine
+  - lab08 : Text Data
   
 ## Computer Network
   - hw01 : practice HTTP & Docker command
