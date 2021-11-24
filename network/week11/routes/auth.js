@@ -21,7 +21,6 @@ router.get('/google/callback',
 
 function authSuccess(req, res){
 		res.redirect('/');
-		console.log("sibal");
 }
 
 module.exports = router;
