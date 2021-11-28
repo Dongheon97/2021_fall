@@ -7,4 +7,5 @@ out
 gen
 build
 rebel.xml
+node_modules
 .ipynb_checkpoints
