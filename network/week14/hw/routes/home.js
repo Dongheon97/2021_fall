@@ -14,11 +14,9 @@ hue.username = "x6AoKBiqgtpEtbPPt6o5xxpOQQwvINLs2dx0Oqnj";
 router.post('/huecontrol', (req, res) => {
   try{
     if(req.body.power == "On"){
+      var state = {bri: parseInt(req.body.brightness), sat: parseInt(req.body.saturation), hue:parseInt(req.body.hue)};
       console.log("On")
-      hue.light(req.body.hueid).on().then(setState(
-        {bri: parseInt(req.body.brightness), 
-         sat: parseInt(req.body.saturation), 
-         hue: parseInt(req.body.hue)})).catch(console.error);
+      hue.light(req.body.hueid).on().then(hue.light(req.body.hueid).setState(state)).catch(console.error);
     }
     if(req.body.power == "Off"){
       console.log("Off");
