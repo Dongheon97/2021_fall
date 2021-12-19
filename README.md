@@ -26,6 +26,8 @@
   - lab06 : K-Means Clustering
   - lab07 : Support Vector Machine
   - lab08 : Text Data
+  - lab09 : Text Data 2
+  - lab10 : MLPClassifier
   
 ## Computer Network
   - hw01 : practice HTTP & Docker command
