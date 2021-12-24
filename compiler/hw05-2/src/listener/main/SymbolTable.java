@@ -63,19 +63,21 @@ public class SymbolTable {
 	
 	void putLocalVar(String varname, Type type){
 		//<Fill here>
-		_lsymtable.put(varname, new VarInfo(type, _localVarID+1));
+		_lsymtable.put(varname, new VarInfo(type, _localVarID++));
 	}
-	
-	void putGlobalVar(String varname, Type type){
-		//<Fill here>
-	}
-	
 	void putLocalVarWithInitVal(String varname, Type type, int initVar){
 		//<Fill here>
-		_lsymtable.put(varname, new VarInfo(type, _localVarID+1, initVar));
+		_lsymtable.put(varname, new VarInfo(type, _localVarID++, initVar));
 	}
+
+	void putGlobalVar(String varname, Type type){
+		//<Fill here>
+		_gsymtable.put(varname, new VarInfo(type, _globalVarID++));
+	}
+
 	void putGlobalVarWithInitVal(String varname, Type type, int initVar){
 		//<Fill here>
+		_gsymtable.put(varname, new VarInfo(type, _globalVarID++, initVar));
 	}
 	
 	void putParams(ParamsContext params) {
@@ -83,11 +85,11 @@ public class SymbolTable {
 		//<Fill here>
 			if(params.param().get(i).getChild(0).getText().equals("int")){
 				// int -> Type.INT
-				_lsymtable.put(params.param().get(i).getChild(1).getText(), new VarInfo(Type.INT, _localVarID+1));
+				_lsymtable.put(params.param().get(i).getChild(1).getText(), new VarInfo(Type.INT, _localVarID++));
 			}
 			else{
 				// else -> Type == null
-				_lsymtable.put(params.param().get(i).getChild(1).getText(), new VarInfo(null, _localVarID+1));
+				_lsymtable.put(params.param().get(i).getChild(1).getText(), new VarInfo(null, _localVarID++));
 			}
 		}
 	}
