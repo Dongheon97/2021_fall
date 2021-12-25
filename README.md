@@ -5,6 +5,8 @@
   - hw02 : Practice MiniC.g4 using 'antlr'
   - hw03 : Pretty Print MiniC using antlr
   - hw04 : Javabyte Code
+  - hw05-1 : bytecode using jasmin
+  - hw05-2 : BytecodeGenListener 
 
 ## Computer Graphics
   - week01 : practice numpy & openCV & matplotlib 
@@ -16,6 +18,9 @@
   - week07 : RANSAC
   - week08 : Gaussian Backward using RANSAC
   - week10 : Convolution Layer
+  - week11 :
+  - week12 :
+  - week13 :
 
 ## Machine Learning
   - lab01 : practice python
@@ -36,4 +41,8 @@
   - hw04 : Multiprocess, Multithread & Locust
   - hw05 : Select & Locust
   - hw06 : Make Blog using Node.js
-  - hw07 : Make Dockerfile & Use Google Cloud Platform(GCP)
+  - hw09 : Make Dockerfile & Use Google Cloud Platform(GCP)
+  - hw11 :
+  - hw12 :
+  - hw13 :
+  - hw14 :
