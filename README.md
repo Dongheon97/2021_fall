@@ -18,9 +18,9 @@
   - week07 : RANSAC
   - week08 : Gaussian Backward using RANSAC
   - week10 : Convolution Layer
-  - week11 :
-  - week12 :
-  - week13 :
+  - week11 : VGG 16
+  - week12 : GoogLeNet
+  - week13 : Image Segmentation
 
 ## Machine Learning
   - lab01 : practice python
@@ -46,3 +46,6 @@
   - hw12 :
   - hw13 :
   - hw14 :
+
+## Software Engineering
+  - hw : JUnit Test
