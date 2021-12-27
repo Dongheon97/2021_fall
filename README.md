@@ -42,10 +42,10 @@
   - hw05 : Select & Locust
   - hw06 : Make Blog using Node.js
   - hw09 : Make Dockerfile & Use Google Cloud Platform(GCP)
-  - hw11 :
-  - hw12 :
-  - hw13 :
-  - hw14 :
+  - hw11 : https & OAuth2 using GCP
+  - hw12 : WebRTC
+  - hw13 : RTSP (EBS)
+  - hw14 : IoT using Philips Hue
 
 ## Software Engineering
   - hw : JUnit Test
